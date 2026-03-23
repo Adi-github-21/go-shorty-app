@@ -68,9 +68,16 @@ func handleShorten(w http.ResponseWriter, r *http.Request) {
 	}
 	mutex.Unlock()
 
+	// Dynamically figure out if we are on Render (https) or Localhost (http)
+	scheme := "http"
+	if r.Header.Get("X-Forwarded-Proto") == "https" {
+		scheme = "https"
+	}
+
+	// r.Host automatically grabs your Render URL (or localhost:8080 if testing locally)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{
-		"short_url": fmt.Sprintf("http://localhost:8080/%s", shortCode),
+		"short_url": fmt.Sprintf("%s://%s/%s", scheme, r.Host, shortCode),
 	})
 }
 
