@@ -14,7 +14,7 @@ function App() {
     setShortUrl('');
 
     try {
-      const response = await fetch('http://localhost:8080/shorten', {
+      const response = await fetch('https://go-shorty-api.onrender.com', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
